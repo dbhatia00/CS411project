@@ -10,7 +10,7 @@ def login(request):
 	return render(request, 'login.html', {})
 
 def form(request):
-	return render(request, 'temp.html', {})
+	return render(request, 'form.html', {})
 
 def song_title(request):
 	data = request.GET['song-title']

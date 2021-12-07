@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'form',
+    'report',
     'social_django'
 ]
 
@@ -129,4 +130,4 @@ SOCIAL_AUTH_SPOTIFY_KEY = '4a1b317eb48c4948ba9924037f6f72ed'
 SOCIAL_AUTH_SPOTIFY_SECRET = 'b9e938375f27472b8c0db8d2dee6b4f5'
 SOCIAL_AUTH_SPOTIFY_SCOPE = ['playlist-read-private', 'playlist-read-collaborative', 'user-library-read']
 LOGIN_REDIRECT_URL = '/form'
-
+LOGOUT_REDIRECT_URL = '/'
