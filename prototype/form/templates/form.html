@@ -6,12 +6,17 @@
     <input type="submit" value="submit">
 </form>
 
+{% for user in users %}
+    <h5>{{user}}</h5>
+{% endfor %}
+
 {% for song in songs %}
-    <h5>"{{ song.title }}" by {{ song.artist }}</h5>
+    <h5>{{song}}</h5>
 {% endfor %}
 
 <a href="/report">Go to the report page</a>
 
+<br>
 <br>
 
 {% if user.is_authenticated %}
