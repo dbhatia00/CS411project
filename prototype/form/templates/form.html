@@ -6,6 +6,10 @@
     <input type="submit" value="submit">
 </form>
 
+{% for song in songs %}
+    <h5>"{{ song.title }}" by {{ song.artist }}</h5>
+{% endfor %}
+
 <a href="/report">Go to the report page</a>
 
 <br>

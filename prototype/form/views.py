@@ -1,16 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from form.models import Song
 #from .forms import NameForm
 import requests
 import json
+
 # Create your views here.
 
 def login(request):
 	return render(request, 'login.html', {})
 
 def form(request):
-	return render(request, 'form.html', {})
+	s1 = Song(title='Great Song Title', artist='GOAT Artist')
+	s1.save()
+	s2 = Song(title='Awful Song Title', artist='Terrible Artist')
+	s2.save()
+	songs = Song.objects.all()
+	context = {
+		'songs' : songs
+	}
+	return render(request, 'form.html', context)
 
 def song_title(request):
 	data = request.GET['song-title']
