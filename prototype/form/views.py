@@ -6,6 +6,10 @@ from form.models import User, Song
 import requests
 import json
 import spotipy
+import pandas as pd
+import re
+import os
+from bs4 import BeautifulSoup
 from spotipy.oauth2 import SpotifyClientCredentials
 # Create your views here.
 
@@ -44,20 +48,38 @@ def form(request):
 	return render(request, 'form.html', context)
 
 def song_title(request):
-	"""
-	cred = SpotifyClientCredentials()
-	sp = spotipy.Spotify(client_credentials_manager=cred)
-	playlists = sp.user_playlists('spotify')
-	
-	sp_auth = SpotifyOAuth(scope="user-library-read",client_id='4a1b317eb48c4948ba9924037f6f72ed', client_secret='b9e938375f27472b8c0db8d2dee6b4f5', redirect_uri='127.0.0.01:8000/form/song_title')
-	code = requests.get("code","")
-	token=sp_auth.get_access_token(code=code)
-	print(token)
+	#PULL ARTIST NAME FROM SONG TITLE
+	user = request.user
+	spot_login = user.social_auth.get(provider='spotify')
 	data = request.GET['song-title']
 	url = 'https://api.spotify.com/v1/search?q='+data+'&type=track&market=US&limit=1'
-	headers = {'Accept': 'application.json' 'Content-Type: application/json' , 'Authorization' : 'Bearer BQABCAH6hkMBCsWjxCCWJkQehpeRCYqqU7lzoGNLG6DkM8yHpGu0ypNCI5xqfi6Dr7iSycqyKJzxo1qEE1qo0vQ82-5I4ubEzS-VsrQs1w3DN3s--DTkGZ9h_uOaenqiJTnVkqeTe67zzMhI-Q6UWl7RR6TPvUTv3ZVMCLFjExDMD1wvbv-B50Fyla6aF995mC2s8Nvqnfb0XArJFiyox_-S5KpYEA'}
+	headers={'Accept':'application/json', 'Authorization':"Bearer "+ spot_login.extra_data['access_token']}
 	r = requests.get(url, headers=headers).content
 	r = json.loads(r.decode('utf-8'))['tracks']['items'][0]['album']['artists'][0]['name']
-	"""
-	return render(request, 'song-title.html', {'data':'ahhh'})
 
+	#USE GET_LYRICS FUNCTION TO PULL LYRICS
+	r = get_lyrics(r, data)
+	return render(request, 'song-title.html', {'data':r})
+
+def get_lyrics(artist, song):
+    artistname = str(artist.replace(' ','-')) if ' ' in artist else str(artist)
+    songname = str(song.replace(' ','-')) if ' ' in song else str(song)
+    url = 'https://genius.com/'+ artistname + '-' + songname + '-' + 'lyrics'
+    soup = BeautifulSoup(requests.get(url).content, 'html.parser')
+    cs = soup.select('div[class^="Lyrics__Container"]')
+    if cs:
+        elements = cs
+    else:
+        elements = soup.select('.lyrics')
+
+    text = ''
+    for elem in elements:
+        for t in elem.select('a, span'):
+            t.unwrap()
+        if elem:
+            elem.smooth()
+            text += elem.get_text(strip=True, separator='\n')
+    # Remove excess strings and lines
+    text = re.sub(r'[\(\[].*?[\)\]]', '', text)
+    text = os.linesep.join([s for s in text.splitlines() if s])
+    return text
