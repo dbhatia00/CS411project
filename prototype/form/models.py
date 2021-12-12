@@ -7,11 +7,11 @@ class User(models.Model):
     user_id = models.CharField(max_length=32)
 
     def __str__(self):
-        return "Hi, " + self.name + " your ID is: " + self.user_id
+        return self.name
 
 class Song(models.Model):
     title = models.CharField(max_length=128)
-    artist = models.CharField(max_length=32)
+    tone = models.CharField(max_length=64)
 
     def __str__(self):
-        return "Search " + str(self.id) + " was: \"" + self.title + "\" by " + self.artist
+        return "\"" + self.title + "\""

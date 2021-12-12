@@ -30,17 +30,12 @@ def form(request):
 	spot_login = user.social_auth.get(provider='spotify')
 	url = "https://api.spotify.com/v1/me"
 	headers={'Accept':'application/json', 'Authorization':"Bearer "+ spot_login.extra_data['access_token']}
-	#print(spot_login.extra_data['access_token'])
 	r = requests.get(url, headers=headers).content
 	data = json.loads(r.decode('utf-8'))
 	disp_name = data['display_name']
 	user_id = data['id']
-	#print(user_id)
-	#print(disp_name)
+	# TODO: don't add a duplicate user
 	User.objects.create(name=disp_name, user_id=user_id)
-	# replace 2 below with real song lookups
-	Song.objects.create(title='Great Song Title', artist='GOAT Artist')
-	Song.objects.create(title='Awful Song Title', artist='Terrible Artist')
 	# end do upon login #
 
 	users = User.objects.all()
@@ -51,7 +46,8 @@ def form(request):
 	}
 	return render(request, 'form.html', context)
 
-def song_title(request):
+def report(request):
+	# do when search is requested #
 	#PULL ARTIST NAME FROM SONG TITLE
 	user = request.user
 	spot_login = user.social_auth.get(provider='spotify')
@@ -69,8 +65,18 @@ def song_title(request):
 
 	# do tone analysis
 	result = analyzer.analyze_tone(r)
+	# end do when search is requested #
 
-	return render(request, 'song-title.html', {'data':result})
+	Song.objects.create(title=data, tone=result)
+
+	users = User.objects.all()
+	songs = Song.objects.all()
+	context = {
+		'users' : users,
+		'songs' : songs
+	}
+
+	return render(request, 'report.html', context)
 
 def get_lyrics(artist, song):
     artistname = str(artist.replace(' ','-')) if ' ' in artist else str(artist)
