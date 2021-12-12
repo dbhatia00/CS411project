@@ -1,11 +1,13 @@
 # User Story 3 - Friends List
-The Friends list shows all the user's friends from Spotify so that they can select one to request a compatibility rating with. 
+The main page will greet the user by saying “Hi -username-.” It will have a search box for the user to search for a song title and a submit button to submit the search request. The main page also has a “See Report” button that will bring the user to the Report Page. Lastly, there is a logout button at the bottom of the page for the user to log out. 
 
 ## Happy path:
-- As a logged in user, the user wants to be able to see my friends list to be able to select friends that will be used for compatibility testing.
-- My friends list should have 2 sections: friends who have songs in the database (logged in through the app), and all other friends in Spotify
-- There will also be a "logout" button, which will log the user out of their Spotify account then redirect them to the login page (see user story 1).
-- At the bottom of the page, there will be a "Playlist list" button which will redirect the user to the playlist page (see user story 2) where they can see their playlists.
+- When the user arrives at the Main Page, they will see a message that says “Search a song” and a search box called “Enter a Song Title.” 
+- The user will be able to submit a search request for a song title. 
+- After the user presses the “submit” button to search for a song title, they will be redirected to the Submissions Page.
+- At the Main Page, there will also be a button called “See Report” that allows the user to view the sentiment analysis report of all their requested songs (see user story 4). 
+- At the bottom of the Main Page, there will be a logout button for the user to log out of the website. 
+
 
 ## Exception:
-- If the user has no friends on this page, then that means they have no friends in Spotify. This is because the friends page should show all their friends on Spotify even if they haven't registered in our app yet.
+- If the user submits a search request for a song title that does not exist, we will show an error message that there is no song with the title that they requested. 
