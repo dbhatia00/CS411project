@@ -1,14 +1,14 @@
 <h1>Search a song</h1>
 
+{% for user in users %}
+    <h5>Hi, {{user}}</h5>
+{% endfor %}
+
 <form action="report">
     <label for="song-title">Enter a Song Title: </label>
     <input id="song-title" type="text" name="song-title" value="">
     <input type="submit" value="submit">
 </form>
-
-{% for user in users %}
-    <h5>Hi, {{user}}</h5>
-{% endfor %}
 
 <a href="/form/report">See Report</a>
 

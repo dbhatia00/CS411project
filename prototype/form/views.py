@@ -18,24 +18,27 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 # Create your views here.
 
 def login(request):
-	# do upon logout #
 	User.objects.all().delete()
 	Song.objects.all().delete()
-	# end do upon logout #
 	return render(request, 'login.html', {})
 
 def form(request):
 	# do upon login #
-	user = request.user
-	spot_login = user.social_auth.get(provider='spotify')
-	url = "https://api.spotify.com/v1/me"
-	headers={'Accept':'application/json', 'Authorization':"Bearer "+ spot_login.extra_data['access_token']}
-	r = requests.get(url, headers=headers).content
-	data = json.loads(r.decode('utf-8'))
-	disp_name = data['display_name']
-	user_id = data['id']
-	# TODO: don't add a duplicate user
-	User.objects.create(name=disp_name, user_id=user_id)
+	# don't attempt to make the User object if it already exists
+	# or if we did not log in yet
+	try:
+		user = request.user
+		spot_login = user.social_auth.get(provider='spotify')
+		url = "https://api.spotify.com/v1/me"
+		headers={'Accept':'application/json', 'Authorization':"Bearer "+ spot_login.extra_data['access_token']}
+		r = requests.get(url, headers=headers).content
+		data = json.loads(r.decode('utf-8'))
+		disp_name = data['display_name']
+		user_id = data['id']
+		# TODO: don't add a duplicate user
+		User.objects.create(name=disp_name, user_id=user_id)
+	except:
+		pass
 	# end do upon login #
 
 	users = User.objects.all()
@@ -48,26 +51,31 @@ def form(request):
 
 def report(request):
 	# do when search is requested #
-	#PULL ARTIST NAME FROM SONG TITLE
-	user = request.user
-	spot_login = user.social_auth.get(provider='spotify')
-	data = request.GET['song-title']
-	url = 'https://api.spotify.com/v1/search?q='+data+'&type=track&market=US&limit=1'
-	headers={'Accept':'application/json', 'Authorization':"Bearer "+ spot_login.extra_data['access_token']}
-	r = requests.get(url, headers=headers).content
-	r = json.loads(r.decode('utf-8'))['tracks']['items'][0]['album']['artists'][0]['name']
+	# don't attempt to do the tone analysis unless we
+	# requested it and it hasn't already been done
+	try:
+		#PULL ARTIST NAME FROM SONG TITLE
+		user = request.user
+		spot_login = user.social_auth.get(provider='spotify')
+		requested_title = request.GET['song-title']
+		url = 'https://api.spotify.com/v1/search?q='+requested_title+'&type=track&market=US&limit=1'
+		headers={'Accept':'application/json', 'Authorization':"Bearer "+ spot_login.extra_data['access_token']}
+		r = requests.get(url, headers=headers).content
+		r = json.loads(r.decode('utf-8'))['tracks']['items'][0]['album']['artists'][0]['name']
 
-	#USE GET_LYRICS FUNCTION TO PULL LYRICS
-	r = get_lyrics(r, data)
-	
-	# tone analyzer object 
-	analyzer = toneAnalyzer()
+		#USE GET_LYRICS FUNCTION TO PULL LYRICS
+		r = get_lyrics(r, requested_title)
+		
+		# tone analyzer object 
+		analyzer = toneAnalyzer()
 
-	# do tone analysis
-	result = analyzer.analyze_tone(r)
+		# do tone analysis
+		result = analyzer.analyze_tone(r)
+		
+		Song.objects.create(title=requested_title.title(), tone=result)
+	except:
+		pass
 	# end do when search is requested #
-
-	Song.objects.create(title=data, tone=result)
 
 	users = User.objects.all()
 	songs = Song.objects.all()
