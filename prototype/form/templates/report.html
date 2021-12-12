@@ -1,0 +1,17 @@
+<h1>Report</h1>
+
+{% for song in songs %}
+    <h5>Analyzed: {{song}}</h5>
+    <h5>Top 3 tones: {{song.tone}}</h5>
+{% endfor %}
+
+<a href="/form">Enter another song</a>
+
+<br>
+<br>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'logout' %}" class="header-link">Logout</a>
+{% else %}
+    <a href="{% url "social:begin" "spotify" %}">Login</a>
+{% endif %}
