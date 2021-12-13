@@ -71,13 +71,18 @@ def report(request):
 
 		# do tone analysis
 		result = analyzer.analyze_tone(r)
+		message = ""
 		try:
 			Song.objects.create(title=requested_title.title(), tone=result)
 		except:
 			pass
 			
 	except:
-		Song.objects.create(title=requested_title.title(), tone='invalid')
+		#Song.objects.create(title=requested_title.title(), tone='')
+		if requested_title == '':
+		   message = "empty"
+		else:
+			message = "Could not find any song titled " + "'" + str(requested_title) + ".' Please try again!"
 		pass
 	# end do when search is requested #
 
@@ -85,7 +90,8 @@ def report(request):
 	songs = Song.objects.all()
 	context = {
 		'users' : users,
-		'songs' : songs
+		'songs' : songs,
+		'message': message
 	}
 
 	return render(request, 'report.html', context)
