@@ -71,8 +71,11 @@ def report(request):
 
 		# do tone analysis
 		result = analyzer.analyze_tone(r)
-		
-		Song.objects.create(title=requested_title.title(), tone=result)
+		try:
+			Song.objects.create(title=requested_title.title(), tone=result)
+		except:
+			pass
+			
 	except:
 		Song.objects.create(title=requested_title.title(), tone='invalid')
 		pass
