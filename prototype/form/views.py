@@ -74,6 +74,7 @@ def report(request):
 		
 		Song.objects.create(title=requested_title.title(), tone=result)
 	except:
+		Song.objects.create(title=requested_title.title(), tone='invalid')
 		pass
 	# end do when search is requested #
 
