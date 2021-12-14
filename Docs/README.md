@@ -26,6 +26,10 @@ prototypeTechChoice.md - This document is for assignment 3 and descibes the fram
 
 prototypeVideoDemo.mkv - This is the video for assignment 3 showing the working prototype.
 
+## Code Organization
+
+The project was done progressively through the Git Repo, and all major changes are recorded there. The 'prototype' branch contains the code for the assignment 3 prototype, and master contains the final version.
+
 ## Keys Required
 
 Spotify keys are needed for authentication via Spotify and should be inserted in settings.py at lines 128-9.
