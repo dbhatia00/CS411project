@@ -125,8 +125,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_SPOTIFY_KEY = '4a1b317eb48c4948ba9924037f6f72ed'
-SOCIAL_AUTH_SPOTIFY_SECRET = 'b9e938375f27472b8c0db8d2dee6b4f5'
+#SOCIAL_AUTH_SPOTIFY_KEY = ''
+#SOCIAL_AUTH_SPOTIFY_SECRET = ''
 SOCIAL_AUTH_SPOTIFY_SCOPE = ['playlist-read-private', 'playlist-read-collaborative', 'user-library-read']
 LOGIN_REDIRECT_URL = '/form'
 LOGOUT_REDIRECT_URL = '/'

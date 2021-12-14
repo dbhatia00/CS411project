@@ -124,7 +124,7 @@ def get_lyrics(artist, song):
 class toneAnalyzer:
 
 	def __init__(self):
-		self.authenticator = IAMAuthenticator('0Ofl1-c0STFcSn4z7_VnRWo7tXwIpVa0xwKNWMYIy1N1')
+		#self.authenticator = IAMAuthenticator('')
 		self.tone_analyzer = ToneAnalyzerV3(version='2017-09-21', authenticator=self.authenticator)
 		self.tone_analyzer.set_service_url('https://api.us-east.tone-analyzer.watson.cloud.ibm.com')
     	
