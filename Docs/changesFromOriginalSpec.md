@@ -13,3 +13,5 @@ Examples of tones include joy, sadness, tentative, etc.
 
 Lastly, we altered the scope by producing a sentiment analysis report for a single user instead of a compatibility report between two users due 
 to time restrictions and difficulty accessing playlists and user information from the Spotify API. 
+
+A note about the Spotify API, the service does not store any lyrics or have them accessible. For this reason, we introduced another API - the Genius API. Given the title of a song (provided by the user) and the name of the artist (pulled from the Spotify API using the song title), Genius will return the lyrics of any song within their database. Introducing this allowed for us to pull lyrics to be sent to the Watson API.
