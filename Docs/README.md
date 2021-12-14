@@ -32,7 +32,7 @@ The project was done progressively through the Git Repo, and all major changes a
 
 ## Keys Required
 
-Spotify keys are needed for authentication via Spotify (create one [here](https://developer.spotify.com/) and should be inserted in settings.py at lines 128-9.
+Spotify keys are needed for authentication via Spotify - create one [here](https://developer.spotify.com/) and should be inserted in settings.py at lines 128-9.
 
 You must have an IBM cloud account to use the ToneAnalyzer which can be found [here](https://cloud.ibm.com/registration). 
 Additionally, a subscription to ToneAnalyzer is required for an API key which can be found [here](https://cloud.ibm.com/catalog/services/tone-analyzer). Insert the API key into views.py at line 127.
