@@ -23,7 +23,6 @@ def login(request):
 	return render(request, 'login.html', {})
 
 def form(request):
-	# do upon login #
 	# don't attempt to make the User object if it already exists
 	# or if we did not log in yet
 	try:
@@ -35,11 +34,9 @@ def form(request):
 		data = json.loads(r.decode('utf-8'))
 		disp_name = data['display_name']
 		user_id = data['id']
-		# TODO: don't add a duplicate user
 		User.objects.create(name=disp_name, user_id=user_id)
 	except:
 		pass
-	# end do upon login #
 
 	users = User.objects.all()
 	songs = Song.objects.all()
@@ -127,7 +124,6 @@ def get_lyrics(artist, song):
 class toneAnalyzer:
 
 	def __init__(self):
-		# this is my api key - will prob need to remove this
 		self.authenticator = IAMAuthenticator('0Ofl1-c0STFcSn4z7_VnRWo7tXwIpVa0xwKNWMYIy1N1')
 		self.tone_analyzer = ToneAnalyzerV3(version='2017-09-21', authenticator=self.authenticator)
 		self.tone_analyzer.set_service_url('https://api.us-east.tone-analyzer.watson.cloud.ibm.com')

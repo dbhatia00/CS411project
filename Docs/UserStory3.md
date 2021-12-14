@@ -1,4 +1,4 @@
-# User Story 3 - Friends List
+# User Story 3 - Songs Page
 The main page will greet the user by saying “Hi -username-.” It will have a search box for the user to search for a song title and a submit button to submit the search request. The main page also has a “See Report” button that will bring the user to the Report Page. Lastly, there is a logout button at the bottom of the page for the user to log out. 
 
 ## Happy path:
