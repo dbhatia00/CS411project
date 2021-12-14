@@ -50,11 +50,10 @@ def form(request):
 	return render(request, 'form.html', context)
 
 def report(request):
-	# do when search is requested #
+	message = ""
 	# don't attempt to do the tone analysis unless we
 	# requested it and it hasn't already been done
 	try:
-		#PULL ARTIST NAME FROM SONG TITLE
 		user = request.user
 		spot_login = user.social_auth.get(provider='spotify')
 		requested_title = request.GET['song-title']
@@ -63,7 +62,7 @@ def report(request):
 		r = requests.get(url, headers=headers).content
 		r = json.loads(r.decode('utf-8'))['tracks']['items'][0]['album']['artists'][0]['name']
 
-		#USE GET_LYRICS FUNCTION TO PULL LYRICS
+		# USE GET_LYRICS FUNCTION TO PULL LYRICS
 		r = get_lyrics(r, requested_title)
 		
 		# tone analyzer object 
@@ -71,20 +70,25 @@ def report(request):
 
 		# do tone analysis
 		result = analyzer.analyze_tone(r)
-		message = ""
+
+		# try to add the analysis to the db
+		# if it fails simply move on with no error message 
+		# (means it was already in the db)
 		try:
 			Song.objects.create(title=requested_title.title(), tone=result)
 		except:
-			pass
-			
+			message = ""
+	# if we came here without requesting, or the analysis failed we enter here
 	except:
-		#Song.objects.create(title=requested_title.title(), tone='')
-		if requested_title == '':
-		   message = "empty"
-		else:
-			message = "Could not find any song titled " + "'" + str(requested_title) + ".' Please try again!"
-		pass
-	# end do when search is requested #
+		# see if we attempted to find a song which wasn't found first
+		try:
+			if requested_title == '':
+		   		message = ""
+			else:
+				message = "Could not find any song titled " + "\"" + str(requested_title) + "\", please try again!"
+		# otherwise we did not request a song
+		except:
+			message = ""
 
 	users = User.objects.all()
 	songs = Song.objects.all()

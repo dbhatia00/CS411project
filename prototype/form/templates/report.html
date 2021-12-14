@@ -1,16 +1,15 @@
 <h1>Report</h1>
 
+<h3>{{message}}</h3>
 
-{% if message == 'empty' and songs|length == 0 %}
-    <h5>You haven't entered any songs yet!</h5>
-{% elif message != 'empty' and message != "" %}
-    <h5>{{message}}</h5>
-{% else %} 
-         {% for song in songs %}
-                <h5>Analyzed: {{song}}</h5>
-                <h5>Tone: {{song.tone}}</h5>
-         {% endfor %}
+{% if songs|length == 0 %}
+    <h3>You haven't entered any songs yet!</h3>
 {% endif %}
+    
+{% for song in songs %}
+    <h4>Analyzed: {{song}}</h4>
+    <p>Tone: {{song.tone}}</p>
+{% endfor %}
 
 <a href="/form">Enter another song</a>
 
